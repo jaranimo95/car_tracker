@@ -23,12 +23,12 @@ public class CarTracker {
 
 		while(true) {
 			System.out.println("What would you like to do?");
-			System.out.println("\t1. Add a Car\n\t2. Update a Car\n\t3. Remove a Car\n\t4. Find Lowest Price Car\n\t5. Find Lowest Mileage Car\n");
+			System.out.println("\t1. Add a Car\n\t2. Update a Car\n\t3. Remove a Car\n\t4. Find Lowest Price Car\n\t5. Find Lowest Mileage Car\n\t6. Find Lowest Car by Make\n\t7. Find Lowest Car by Model");
 			
 			while (true) {
 				System.out.print("Select a number to choose an option: ");
 				choice = kb.nextInt();
-				if(choice < 1 || choice > 5) 
+				if(choice < 1 || choice > 7) 
 				 	System.out.println("\n!! Invalid choice - please select an option between 1 and 5. !!\n");
 				else {
 					kb.nextLine();
@@ -40,6 +40,8 @@ public class CarTracker {
 			else if (choice == 3) remove();
 			else if (choice == 4) getLowestPrice();
 			else if (choice == 5) getLowestMileage();
+			else if (choice == 6) getLowestByMake();
+			else if (choice == 7) getLowestByModel();
 		}
 		
 	}
@@ -61,11 +63,11 @@ public class CarTracker {
 		}
 											     temp.setVin(str.toUpperCase());
 		System.out.print("Enter the make: ");    str = kb.nextLine();
-											     temp.setMake(str.toUpperCase());
+											     temp.setMake(str);
 		System.out.print("Enter the model: ");   str = kb.nextLine();
-											     temp.setModel(str.toUpperCase());
+											     temp.setModel(str);
 		System.out.print("Enter the colour: ");  str = kb.nextLine();
-											     temp.setColour(str.toUpperCase());
+											     temp.setColour(str);
 		System.out.print("Enter the price: ");   j = kb.nextInt();
 											     temp.setPrice(j);
 		System.out.print("Enter the mileage: "); j = kb.nextInt();
@@ -102,55 +104,37 @@ public class CarTracker {
    		for(int i : pqPrice.pq) {
 			if (pqPrice.carAt(i).getVin().compareTo(vinToFind) == 0) {
 		   		System.out.println("What field would you like to update?");
-				System.out.println("\t1. VIN\n\t2. Make\n\t3. Model\n\t4. Colour\n\t5. Price\n\t6. Mileage\n");
+				System.out.println("\t1. Price\n\t2. Model\n\t3. Colour\n");
 		   		while (true) {
 					System.out.print("Select a number to choose an option: ");
 					choice = kb.nextInt();
-					if(choice < 1 || choice > 6) 
-					 	System.out.println("\n!! Invalid choice - please select an option between 1 and 6. !!\n");
+					if(choice < 1 || choice > 3) 
+					 	System.out.println("\n!! Invalid choice - please select an option between 1 and 3. !!\n");
 					else {
 						kb.nextLine();
 						break;
 					}
 				}
 				switch (choice) {	// Update temp using setter method corresponding to the chosen field
-					case 1: while(true) {
-								System.out.print("Please enter the new VIN: "); str = kb.nextLine();
-									if (  str.contains("Q") ////////////////////////////////////////////
-									   || str.contains("I") ///////////////////////////////////////////
-									   || str.contains("O") //////////////////////////////////////////
-									   || str.contains("q") /////////////////////////////////////////
-									   || str.contains("i") ////////////////////////////////////////
-									   || str.contains("o")  ) System.out.println("\n!! Error - VIN cannot contain Q (q), I (i), or O (o) !!\n");
-							   else if ( str.length() != 17  ) System.out.println("\n!! Error - VIN must be of 17 characters in length !!\n");
-							   else	    					   break;
-							}
-							temp = pqPrice.carAt(i);
-							temp.setVin(str.toUpperCase());
-							break;	 
-					case 2: 	    		   	  System.out.print("Please enter the new make: ");															
-					case 3: 	 if (choice == 3) System.out.print("Please enter the new model: ");
-					case 4: 	 if (choice == 4) System.out.print("Please enter the new colour: ");
-							 str = kb.nextLine();
-					 		temp = pqPrice.carAt(i);
-								 if (choice == 2) temp.setMake(str.toUpperCase());
-						    else if (choice == 3) temp.setModel(str.toUpperCase());
-						    else if (choice == 4) temp.setColour(str.toUpperCase());
-						    break;
-					case 5: System.out.print("Please enter the new price: $"); j = kb.nextInt();
+					case 1: System.out.print("Please enter the new price: $"); j = kb.nextInt();
 					 		 	 if (j < pqPrice.carAt(i).getPrice())
 					 		 		 pqPrice.decrease(i,j);
 					 	    else if (j > pqPrice.carAt(i).getPrice())
 					 		 		 pqPrice.increase(i,j);
 					 	    else 	 System.out.println("This price is the same as the car's current price.\n");
 					 	    break;
-					case 6: System.out.print("Please enter the new mileage: "); j = kb.nextInt();
+					case 2: System.out.print("Please enter the new mileage: "); j = kb.nextInt();
 					 		 	 if (j < pqMileage.carAt(i).getMileage())
 					 		 		 pqMileage.decrease(i,j);
 					 	    else if (j > pqMileage.carAt(i).getMileage())
 					 		 		 pqMileage.increase(i,j);
 					 	    else 	 System.out.println("This mileage is the same as the car's current mileage.\n");
-					 	    break;
+					 	    break;													
+					case 3: System.out.print("Please enter the new colour: ");
+							str = kb.nextLine();
+					 		temp = pqPrice.carAt(i);
+							temp.setColour(str);
+						    break;
 				   default: throw new IllegalArgumentException("!! LOGIC FAULT - option does not exist !!");
 				}
 				break;
@@ -174,33 +158,64 @@ public class CarTracker {
 			}
 		}
 
+		boolean[] deleted = new boolean[2];
 		for(int i : pqPrice.pq) {
 			if (pqPrice.carAt(i).getVin().compareTo(vinToFind) == 0) {
 				pqPrice.delete(i);
+				deleted[0] = true;
+				break;
+			}
+		}
+		for(int i : pqMileage.pq) {
+			if (pqMileage.carAt(i).getVin().compareTo(vinToFind) == 0) {
 				pqMileage.delete(i);
-				System.out.println("Car was removed successfully.\n");
+				deleted[1] = true;
+				break;
+			}
+		}
+		if(deleted[0] && deleted[1]) System.out.println("Car was removed successfully.\n");
+		else				 		 System.out.println("Car was not removed successfully.\n");
+
+	}
+	private static void getLowestPrice() {
+		System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+pqPrice.minCar().getVin()+"\n\tMake: "+pqPrice.minCar().getMake()+"\n\tModel: "+pqPrice.minCar().getModel()+"\n\tColour: "+pqPrice.minCar().getColour()+"\n\tPrice: $"+pqPrice.minCar().getPrice()+"\n\tMileage: "+pqPrice.minCar().getMileage()+"\n");
+	}
+	private static void getLowestMileage() {
+		System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.minCar().getVin()+"\n\tMake: "+pqMileage.minCar().getMake()+"\n\tModel: "+pqMileage.minCar().getModel()+"\n\tColour: "+pqMileage.minCar().getColour()+"\n\tPrice: $"+pqMileage.minCar().getPrice()+"\n\tMileage: "+pqMileage.minCar().getMileage()+"\n");
+	}
+	private static void getLowestByMake() {
+		String makeToFind;
+		System.out.print("Make: "); makeToFind = kb.nextLine();
+		for(int i : pqPrice.pq) {
+			if(pqPrice.carAt(i).getMake().compareTo(makeToFind) == 0) {		// Will find lowest first since top-down traversal of PQ
+				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+pqPrice.carAt(i).getVin()+"\n\tMake: "+pqPrice.carAt(i).getMake()+"\n\tModel: "+pqPrice.carAt(i).getModel()+"\n\tColour: "+pqPrice.carAt(i).getColour()+"\n\tPrice: $"+pqPrice.carAt(i).getPrice()+"\n\tMileage: "+pqPrice.carAt(i).getMileage()+"\n");
+				break;
+			}
+		}
+		for(int j : pqMileage.pq) {
+			if(pqMileage.carAt(j).getMake().compareTo(makeToFind) == 0) {
+				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.carAt(j).getVin()+"\n\tMake: "+pqMileage.carAt(j).getMake()+"\n\tModel: "+pqMileage.carAt(j).getModel()+"\n\tColour: "+pqMileage.carAt(j).getColour()+"\n\tPrice: $"+pqMileage.carAt(j).getPrice()+"\n\tMileage: "+pqMileage.carAt(j).getMileage()+"\n");
 				break;
 			}
 		}
 
 	}
-	private static void getLowestPrice() {
-		System.out.println("The lowest-priced vehicle is:\n\tVIN: "+pqPrice.minCar().getVin()+"\n\tMake: "+pqPrice.minCar().getMake()+"\n\tModel: "+pqPrice.minCar().getModel()+"\n\tColour: "+pqPrice.minCar().getColour()+"\n\tPrice: $"+pqPrice.minCar().getPrice()+"\n\tMileage: "+pqPrice.minCar().getMileage()+"\n");
-	}
-	private static void getLowestMileage() {
-		System.out.println("The lowest-priced vehicle is:\n\tVIN: "+pqMileage.minCar().getVin()+"\n\tMake: "+pqMileage.minCar().getMake()+"\n\tModel: "+pqMileage.minCar().getModel()+"\n\tColour: "+pqMileage.minCar().getColour()+"\n\tPrice: $"+pqMileage.minCar().getPrice()+"\n\tMileage: "+pqMileage.minCar().getMileage()+"\n");
-	}
-	private static void getLowestPriceByMake() {
-
-	}
-	private static void getLowestPriceByModel() {
-
-	}
-	private static void getLowestMileageByMake() {
-
-	}
-	private static void getLowestMileageByModel() {
-		
+	private static void getLowestByModel() {
+		// Traverse PQ in order and return the first instance of corresponding model
+		String modelToFind;
+		System.out.print("Model: "); modelToFind = kb.nextLine();
+		for(int i : pqPrice.pq) {
+			if(pqPrice.carAt(i).getModel().compareTo(modelToFind) == 0)	{	// Will find lowest first since top-down traversal of PQ
+				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+pqPrice.carAt(i).getVin()+"\n\tMake: "+pqPrice.carAt(i).getMake()+"\n\tModel: "+pqPrice.carAt(i).getModel()+"\n\tColour: "+pqPrice.carAt(i).getColour()+"\n\tPrice: $"+pqPrice.carAt(i).getPrice()+"\n\tMileage: "+pqPrice.carAt(i).getMileage()+"\n");
+				break;
+			}
+		}
+		for(int j : pqMileage.pq) {
+			if(pqMileage.carAt(j).getModel().compareTo(modelToFind) == 0) {
+				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.carAt(j).getVin()+"\n\tMake: "+pqMileage.carAt(j).getMake()+"\n\tModel: "+pqMileage.carAt(j).getModel()+"\n\tColour: "+pqMileage.carAt(j).getColour()+"\n\tPrice: $"+pqMileage.carAt(j).getPrice()+"\n\tMileage: "+pqMileage.carAt(j).getMileage()+"\n");
+				break;
+			}
+		}
 	}
 }
 
