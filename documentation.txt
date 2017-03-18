@@ -12,5 +12,14 @@ identification of their functionality.
 
 To determine whether an operation is being done on the price PQ or the mileage PQ, I set a global
 mode. In decrease()/increase(), mode affects what field of the Car object is being compared
-(price or mileage, respectively). The use of this is pretty apparent given my choice of using
-2 separate PQ's to ease finding minimums.
+(price or mileage, respectively). The use of this throughout the rest of my program is identical.
+
+As far as the retrieval operations are concerned, my methods run with an average case Theta(log n) as
+I am doing a simple tree traversal for each of them. In my getLowestByMake/Model methods, I build up a
+copy of the pq in question (price or mileage), so that I can simply call minCar() in conjunction with
+delMin(), which I use if min car is of a different model/make. This allows me to always find the minimum
+price/mileage per make/model. Although this building up of a copy queue takes n time to accomplish,
+the actual search through the structure takes O(log n) time to do, which is why I consider the search
+time to be logarithmic. 
+
+My space requirements for add/remove are O(1), while for lowest by make/model, it is O(n).

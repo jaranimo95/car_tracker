@@ -278,6 +278,10 @@ public class IndexMinPQ implements Iterable<Integer> {
         qp[i] = -1;
     }
 
+    public Car[] getCars() {
+        return cars;
+    }
+
 
    /***************************************************************************
     * General helper functions.

@@ -12,7 +12,6 @@ public class CarTracker {
 	private static IndexMinPQ pqMileage = new IndexMinPQ(100,'m');		// Will hold same cars, but organized in priority by mileage
 	private static Scanner 			 kb = new Scanner(System.in);
 	private static int 			numCars = 0;
-	//private static Car[];
 	
 	public static void main (String[] args) {
 
@@ -184,37 +183,62 @@ public class CarTracker {
 		System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.minCar().getVin()+"\n\tMake: "+pqMileage.minCar().getMake()+"\n\tModel: "+pqMileage.minCar().getModel()+"\n\tColour: "+pqMileage.minCar().getColour()+"\n\tPrice: $"+pqMileage.minCar().getPrice()+"\n\tMileage: "+pqMileage.minCar().getMileage()+"\n");
 	}
 	private static void getLowestByMake() {
+		// Make copy of pq and keep using minCar() & delMin() until car with matching make is found
+
+		Car[] cars = pqPrice.getCars();
+		IndexMinPQ copy = new IndexMinPQ(pqPrice.pq.length - 1,'p');
+            for (int i = 1; i <= pqPrice.size(); i++)
+                copy.insert(pqPrice.pq[i], cars[pqPrice.pq[i]]);
+
 		String makeToFind;
 		System.out.print("Make: "); makeToFind = kb.nextLine();
-		for(int i : pqPrice.pq) {
-			if(pqPrice.carAt(i).getMake().compareTo(makeToFind) == 0) {		// Will find lowest first since top-down traversal of PQ
-				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+pqPrice.carAt(i).getVin()+"\n\tMake: "+pqPrice.carAt(i).getMake()+"\n\tModel: "+pqPrice.carAt(i).getModel()+"\n\tColour: "+pqPrice.carAt(i).getColour()+"\n\tPrice: $"+pqPrice.carAt(i).getPrice()+"\n\tMileage: "+pqPrice.carAt(i).getMileage()+"\n");
+		for(int i = 0; i < copy.pq.length; i++) {
+			if(copy.minCar().getMake().compareTo(makeToFind) == 0) {		// Will find lowest first since top-down traversal of PQ
+				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+copy.minCar().getVin()+"\n\tMake: "+copy.minCar().getMake()+"\n\tModel: "+copy.minCar().getModel()+"\n\tColour: "+copy.minCar().getColour()+"\n\tPrice: $"+copy.minCar().getPrice()+"\n\tMileage: "+copy.minCar().getMileage()+"\n");
 				break;
-			}
+			} else copy.delMin();
 		}
-		for(int j : pqMileage.pq) {
-			if(pqMileage.carAt(j).getMake().compareTo(makeToFind) == 0) {
-				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.carAt(j).getVin()+"\n\tMake: "+pqMileage.carAt(j).getMake()+"\n\tModel: "+pqMileage.carAt(j).getModel()+"\n\tColour: "+pqMileage.carAt(j).getColour()+"\n\tPrice: $"+pqMileage.carAt(j).getPrice()+"\n\tMileage: "+pqMileage.carAt(j).getMileage()+"\n");
+
+		cars = pqMileage.getCars();
+		copy = new IndexMinPQ(pqMileage.pq.length - 1,'m');
+            for (int i = 1; i <= pqMileage.size(); i++)
+                copy.insert(pqMileage.pq[i], cars[pqMileage.pq[i]]);
+
+		for(int j = 0; j < copy.pq.length; j++) {
+			if(copy.minCar().getMake().compareTo(makeToFind) == 0) {
+				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+copy.minCar().getVin()+"\n\tMake: "+copy.minCar().getMake()+"\n\tModel: "+copy.minCar().getModel()+"\n\tColour: "+copy.minCar().getColour()+"\n\tPrice: $"+copy.minCar().getPrice()+"\n\tMileage: "+copy.minCar().getMileage()+"\n");
 				break;
-			}
+			} else copy.delMin();
 		}
 
 	}
 	private static void getLowestByModel() {
-		// Traverse PQ in order and return the first instance of corresponding model
+		// Make copy of pq and keep using minCar() & delMin() until car with matching make is found
+
+		Car[] cars = pqPrice.getCars();
+		IndexMinPQ copy = new IndexMinPQ(pqPrice.pq.length - 1,'p');
+            for (int i = 1; i <= pqPrice.size(); i++)
+                copy.insert(pqPrice.pq[i], cars[pqPrice.pq[i]]);
+
 		String modelToFind;
 		System.out.print("Model: "); modelToFind = kb.nextLine();
-		for(int i : pqPrice.pq) {
-			if(pqPrice.carAt(i).getModel().compareTo(modelToFind) == 0)	{	// Will find lowest first since top-down traversal of PQ
-				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+pqPrice.carAt(i).getVin()+"\n\tMake: "+pqPrice.carAt(i).getMake()+"\n\tModel: "+pqPrice.carAt(i).getModel()+"\n\tColour: "+pqPrice.carAt(i).getColour()+"\n\tPrice: $"+pqPrice.carAt(i).getPrice()+"\n\tMileage: "+pqPrice.carAt(i).getMileage()+"\n");
+		for(int i = 0; i < copy.pq.length; i++) {
+			if(copy.minCar().getModel().compareTo(modelToFind) == 0) {		// Will find lowest first since top-down traversal of PQ
+				System.out.println("\nThe lowest-priced vehicle is:\n\tVIN: "+copy.minCar().getVin()+"\n\tMake: "+copy.minCar().getMake()+"\n\tModel: "+copy.minCar().getModel()+"\n\tColour: "+copy.minCar().getColour()+"\n\tPrice: $"+copy.minCar().getPrice()+"\n\tMileage: "+copy.minCar().getMileage()+"\n");
 				break;
-			}
+			} else copy.delMin();
 		}
-		for(int j : pqMileage.pq) {
-			if(pqMileage.carAt(j).getModel().compareTo(modelToFind) == 0) {
-				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+pqMileage.carAt(j).getVin()+"\n\tMake: "+pqMileage.carAt(j).getMake()+"\n\tModel: "+pqMileage.carAt(j).getModel()+"\n\tColour: "+pqMileage.carAt(j).getColour()+"\n\tPrice: $"+pqMileage.carAt(j).getPrice()+"\n\tMileage: "+pqMileage.carAt(j).getMileage()+"\n");
+
+		cars = pqMileage.getCars();
+		copy = new IndexMinPQ(pqMileage.pq.length - 1,'m');
+            for (int i = 1; i <= pqMileage.size(); i++)
+                copy.insert(pqMileage.pq[i], cars[pqMileage.pq[i]]);
+
+		for(int j = 0; j < copy.pq.length; j++) {
+			if(copy.minCar().getModel().compareTo(modelToFind) == 0) {
+				System.out.println("\nThe lowest-mileage vehicle is:\n\tVIN: "+copy.minCar().getVin()+"\n\tMake: "+copy.minCar().getMake()+"\n\tModel: "+copy.minCar().getModel()+"\n\tColour: "+copy.minCar().getColour()+"\n\tPrice: $"+copy.minCar().getPrice()+"\n\tMileage: "+copy.minCar().getMileage()+"\n");
 				break;
-			}
+			} else copy.delMin();
 		}
 	}
 }
