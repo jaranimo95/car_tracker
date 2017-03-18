@@ -1,0 +1,16 @@
+Documentation
+
+For the indexible minimum priority queue, I used the book code as a basis for my changes,
+since they'd already gone ahead and taken care of most of the complicated underlying 
+dependencies that would've made the PQ difficult to implement from scratch (pq[] and qp[],
+sink/swim methods, iterator implementation, etc.). To start with editing, I removed the
+support for generics to better tailor the queue to work on Car objects alone. I decided to
+use 2 separate PQ's for price and mileage, seeing as adding/removing is as simple as adding/
+removing to/from both upon request, and finding the minimum price/mileage car requires only a
+minCar() method call. I renamed most of the methods in IndexMinPQ.java for better first-glance 
+identification of their functionality.
+
+To determine whether an operation is being done on the price PQ or the mileage PQ, I set a global
+mode. In decrease()/increase(), mode affects what field of the Car object is being compared
+(price or mileage, respectively). The use of this is pretty apparent given my choice of using
+2 separate PQ's to ease finding minimums.

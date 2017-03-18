@@ -12,7 +12,7 @@ public class CarTracker {
 	private static IndexMinPQ pqMileage = new IndexMinPQ(100,'m');		// Will hold same cars, but organized in priority by mileage
 	private static Scanner 			 kb = new Scanner(System.in);
 	private static int 			numCars = 0;
-	private static Car[];
+	//private static Car[];
 	
 	public static void main (String[] args) {
 
@@ -56,7 +56,6 @@ public class CarTracker {
 			else if (str.length() != 17)
 					System.out.println("\n!! Error - VIN must be of 17 characters in length !!\n");
 			else {
-				//kb.nextLine();
 				break;
 			} 	
 		}
@@ -171,7 +170,6 @@ public class CarTracker {
 					System.out.println("\n!! Error - VIN must be of 17 characters in length !!\n");
 			else {
 				vinToFind.toUpperCase();
-				//kb.nextLine();
 				break;
 			}
 		}
@@ -187,10 +185,22 @@ public class CarTracker {
 
 	}
 	private static void getLowestPrice() {
-		System.out.println("The lowest-priced vehicle is VIN: "+pqPrice.minCar().getVin()+"\n     - Price: $"+pqPrice.minCar().getPrice()+"\n");
+		System.out.println("The lowest-priced vehicle is:\n\tVIN: "+pqPrice.minCar().getVin()+"\n\tMake: "+pqPrice.minCar().getMake()+"\n\tModel: "+pqPrice.minCar().getModel()+"\n\tColour: "+pqPrice.minCar().getColour()+"\n\tPrice: $"+pqPrice.minCar().getPrice()+"\n\tMileage: "+pqPrice.minCar().getMileage()+"\n");
 	}
 	private static void getLowestMileage() {
-		System.out.println("The lowest-mileage vehicle is VIN: "+pqMileage.minCar().getVin()+"\n     - Mileage: "+pqMileage.minCar().getMileage()+" miles\n");
+		System.out.println("The lowest-priced vehicle is:\n\tVIN: "+pqMileage.minCar().getVin()+"\n\tMake: "+pqMileage.minCar().getMake()+"\n\tModel: "+pqMileage.minCar().getModel()+"\n\tColour: "+pqMileage.minCar().getColour()+"\n\tPrice: $"+pqMileage.minCar().getPrice()+"\n\tMileage: "+pqMileage.minCar().getMileage()+"\n");
+	}
+	private static void getLowestPriceByMake() {
+
+	}
+	private static void getLowestPriceByModel() {
+
+	}
+	private static void getLowestMileageByMake() {
+
+	}
+	private static void getLowestMileageByModel() {
+		
 	}
 }
 
